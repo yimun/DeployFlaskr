@@ -16,6 +16,15 @@ before_deploy:
     - mv latest.zip dpl_cd_upload/latest.zip
     - ls -al dpl_cd_upload/
 
+deploy:
+    - echo "deploy begin"
+    - chmod 755 /home/travis/.ssh/
+    - cd /home/travis/.ssh
+    - echo $SSHPRIVATE > yimu.pem
+    - chmod 400 ./yimu.pem
+    - ls -l /home/travis/.ssh
+    - ssh -i /home/travis/.ssh/yimu.pem -o StrictHostKeyChecking=no $AWS "cd /home ; ls"
+    - echo 'done'
 #deploy:
     #- provider: codedeploy
         #access_key_id: "YOUR AWS ACCESS KEY"
