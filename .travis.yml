@@ -9,15 +9,7 @@ install:
 script:
     - echo 'Run test...'
     - python flaskr_tests.py
-
-before_deploy:
-    - zip -r latest *
-    - mkdir -p dpl_cd_upload
-    - mv latest.zip dpl_cd_upload/latest.zip
-    - ls -al dpl_cd_upload/
-
-deploy:
-    - echo "deploy begin"
+    - echo "ssh begin"
     - chmod 755 /home/travis/.ssh/
     - cd /home/travis/.ssh
     - echo $SSHPRIVATE > yimu.pem
@@ -25,11 +17,11 @@ deploy:
     - ls -l /home/travis/.ssh
     - ssh -i /home/travis/.ssh/yimu.pem -o StrictHostKeyChecking=no $AWS "cd /home ; ls"
     - echo 'done'
-#deploy:
-    #- provider: codedeploy
-        #access_key_id: "YOUR AWS ACCESS KEY"
-        #secret_access_key: "YOUR AWS SECRET KEY"
-        #bucket: "S3 Bucket"
-        #key: latest/MyApp.zip
-        #application: MyApp
-        #deployment_group: MyDeploymentGroup
+
+before_deploy:
+    - zip -r latest *
+    - mkdir -p dpl_cd_upload
+    - mv latest.zip dpl_cd_upload/latest.zip
+    - ls -al dpl_cd_upload/
+
+# deploy:
