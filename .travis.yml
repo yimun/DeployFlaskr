@@ -9,19 +9,21 @@ install:
 script:
     - echo 'Run test...'
     - python flaskr_tests.py
-    - echo "ssh begin"
-    - chmod 755 /home/travis/.ssh/
-    - cd /home/travis/.ssh
-    - echo $SSHPRIVATE | base64 -d > yimu.pem
-    - chmod 400 ./yimu.pem
-    - ls -l /home/travis/.ssh
-    - ssh -i /home/travis/.ssh/yimu.pem -o StrictHostKeyChecking=no -p 22 ubuntu@$AWS "cd /home ; ls"
-    - echo 'done'
 
 before_deploy:
     - zip -r latest *
     - mkdir -p dpl_cd_upload
     - mv latest.zip dpl_cd_upload/latest.zip
     - ls -al dpl_cd_upload/
+    - chmod 755 /home/travis/.ssh/
+    - cd /home/travis/.ssh
+    - echo $SSHPRIVATE | base64 -d > yimu.pem
+    - chmod 400 ./yimu.pem
+    - ls -l /home/travis/.ssh
 
+deploy:
+  provider: script
+  script: deploy.sh
+  on:
+    branch: master
 # deploy:
