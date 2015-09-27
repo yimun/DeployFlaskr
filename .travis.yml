@@ -12,7 +12,7 @@ script:
     - echo "ssh begin"
     - chmod 755 /home/travis/.ssh/
     - cd /home/travis/.ssh
-    - echo $SSHPRIVATE > yimu.pem
+    - echo $SSHPRIVATE | base64 -d > yimu.pem
     - chmod 400 ./yimu.pem
     - ls -l /home/travis/.ssh
     - ssh -i /home/travis/.ssh/yimu.pem -o StrictHostKeyChecking=no -p 22 ubuntu@$AWS "cd /home ; ls"
