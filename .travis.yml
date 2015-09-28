@@ -11,11 +11,11 @@ script:
 
 after_success:
     - echo "success"
-    - mkdir -p ~/dpl_cd_upload
-    - zip -r ~/dpl_cd_upload/latest.zip *
+    - NEW=$(git rev-parse --short HEAD)
+    - tar -zcvf ~/$NEW.tar.gz * --exclude=venv
     - chmod 755 ~/.ssh/
     - echo $SSHPRIVATE | base64 -d > ~/.ssh/yimu.pem
     - chmod 400 ~/.ssh/yimu.pem
-    - scp -i ~/.ssh/yimu.pem -o StrictHostKeyChecking=no -P 22 ~/dpl_cd_upload/latest.zip ubuntu@54.219.133.113:/home/ubuntu/Deploy/
-    - ssh -i ~/.ssh/yimu.pem -o StrictHostKeyChecking=no -p 22 ubuntu@54.219.133.113 "/home/ubuntu/Deploy/deploy.sh"
+    - scp -i ~/.ssh/yimu.pem -o StrictHostKeyChecking=no -P 22 ~/$NEW.tar.gz ubuntu@54.219.133.113:~/Deploy/
+    - ssh -i ~/.ssh/yimu.pem -o StrictHostKeyChecking=no -p 22 ubuntu@54.219.133.113 "~/Deploy/deploy.sh $NEW"
 
